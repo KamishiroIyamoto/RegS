@@ -6,7 +6,7 @@
 class DataBase {
 
     private PDO $dataBase;
-    private PDOStatement $queryExecutor;
+    private PDOStatement $queryFetcher;
 
     /**
      * Base constructor for DataBase class
@@ -23,10 +23,10 @@ class DataBase {
     /**
      * Prepared query for subsequent execution
      */
-    public function prepareQuery(string $preparedQuery): void {
-        self::$queryExecutor = self::$dataBase->prepare($preparedQuery);
+    private function prepareQuery(string $preparedQuery): void {
+        $this::$queryFetcher = $this::$dataBase->prepare($preparedQuery);
 
-        if (self::$queryExecutor === false) {
+        if ($this::$queryFetcher === false) {
             die("Invalid prepared query.");
         }
     }
@@ -34,23 +34,36 @@ class DataBase {
     /**
      * Executes current prepared query
      */
-    public function executeQuery(array $queryParams): void {
-        if (!isset(self::$queryExecutor)) {
+    private function executeQuery(array $queryParams): void {
+        if (!isset($this::$queryFetcher)) {
             die("Invalid order of query execution. Prepare query before execute it.");
         }
 
         try {
-            $result = self::$queryExecutor->execute($queryParams); 
+            $result = $this::$queryFetcher->execute($queryParams); 
 
             if (!$result) {
                 die("Query execution failed.");
             }
-
-            self::$queryExecutor = null; // Unset executor
         }
         catch (PDOException $e) {
             die($e->getMessage());
         }
+    }
+
+    /**
+     * 
+     */
+    public function query(string $preparedQuery, array $queryParams) {
+        $this->prepareQuery($preparedQuery);
+        $this->executeQuery($queryParams);
+    }
+
+    /**
+     * Returns query executor 
+     */
+    public function getFetcher(): PDOStatement {
+        return $this::$queryFetcher;
     }
 
 }
