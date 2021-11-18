@@ -5,15 +5,18 @@
  */
 class DataBase {
 
-    private PDO $dataBase;
-    private PDOStatement $queryFetcher;
+    const FETCH_ALL = 0;
+    const FETCH = 1;
+
+    private $dataBase;
+    private $queryFetcher = null;
 
     /**
      * Base constructor for DataBase class
      */
     public function __construct(string $hostname, string $username, string $password, string $dataBaseName) {
         try {
-            $dataBase = new PDO("mysql:dbname=".$dataBaseName.";host=".$hostname, $username, $password);
+            $this->dataBase = new PDO("mysql:dbname=".$dataBaseName.";host=".$hostname, $username, $password);
         } 
         catch (PDOException $e) {
             die($e->getMessage());
@@ -24,9 +27,9 @@ class DataBase {
      * Prepared query for subsequent execution
      */
     private function prepareQuery(string $preparedQuery): void {
-        $this::$queryFetcher = $this::$dataBase->prepare($preparedQuery);
+        $this->queryFetcher = $this->dataBase->prepare($preparedQuery);
 
-        if ($this::$queryFetcher === false) {
+        if ($this->queryFetcher === false) {
             die("Invalid prepared query.");
         }
     }
@@ -35,12 +38,12 @@ class DataBase {
      * Executes current prepared query
      */
     private function executeQuery(array $queryParams): void {
-        if (!isset($this::$queryFetcher)) {
+        if (!isset($this->queryFetcher)) {
             die("Invalid order of query execution. Prepare query before execute it.");
         }
 
         try {
-            $result = $this::$queryFetcher->execute($queryParams); 
+            $result = $this->queryFetcher->execute($queryParams); 
 
             if (!$result) {
                 die("Query execution failed.");
@@ -62,8 +65,13 @@ class DataBase {
     /**
      * Returns query executor 
      */
-    public function getFetcher(): PDOStatement {
-        return $this::$queryFetcher;
+    public function fetch(int $fetchMode, int $PDOMode) {
+        $tempQueryFetcher = $this->queryFetcher;
+        
+        if ($fetchMode === DataBase::FETCH_ALL) {
+            return $tempQueryFetcher->fetchAll($PDOMode);
+        }
+        return $tempQueryFetcher->fetch($PDOMode);
     }
 
 }

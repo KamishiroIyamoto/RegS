@@ -13,3 +13,6 @@ input{
     border-radius:10px;
 	border:1px solid #4e6096;
 }
+form,button{
+    display: inline-block;
+}

@@ -1,5 +1,6 @@
 document.forms.form.onsubmit = function(e){
     e.preventDefault();
+    document.getElementById('password').value = encryptPassword(document.getElementById('password').value);
     var xhr = new XMLHttpRequest();
     xhr.open('POST', 'http://localhost/RegS/core/index.php');
     var formData = new FormData(document.forms.form);
@@ -10,4 +11,3 @@ document.forms.form.onsubmit = function(e){
     }
     xhr.send(formData);
 };
-
