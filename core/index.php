@@ -1,4 +1,5 @@
 <?php
+
 $email = $_POST['email'];
 $password = $_POST['password'];
 $username = $_POST['username'];
@@ -10,7 +11,7 @@ if($mysql->connect_error){
 }
 else{
     if(isset($username)){
-        $mysql->query("INSERT INTO `users`(`id`, `email`, `password`, `username`) VALUES (NULL','{$email}','{$password}','{$username}')");
+        $mysql->query("INSERT INTO `users`(`id`, `email`, `password`, `username`) VALUES (NULL,'{$email}','{$password}','{$username}')");
         echo 'Вы зарегестрированы!';
     }
     else{
