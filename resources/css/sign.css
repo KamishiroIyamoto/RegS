@@ -1,18 +1,19 @@
-span{
-    margin-top: 5pt;
-}
 span,input{
     color:#ffffff;
 	font-family:Arial;
 	font-size:19px;
+    margin-bottom: -5pt;
     padding-left: 5pt;
-    padding-top: 15pt;
+    margin-top: 15pt;
 }
 input{
     background-color: rgb(29,171,170);
     border-radius:10px;
 	border:1px solid #4e6096;
 }
-form,button{
+form,button, input{
     display: inline-block;
+}
+img{
+    width: 50%;
 }
