@@ -20,6 +20,8 @@
 img{
 	max-height: 450pt;
 	max-width: 450pt;
+	min-height: 450pt;
+	min-width: 450pt;
 }
 .footer{
 	position: absolute;
