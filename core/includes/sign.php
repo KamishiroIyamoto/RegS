@@ -9,13 +9,15 @@ $userUsername = $_POST["username"] ?? NULL;
 $dataBaseHandler = new DataBase(HOST_NAME, USER_NAME, PASSWORD, DB_NAME);
 
 if(isset($userUsername)){
-    $dataBaseHandler->query("INSERT INTO `users`(`id`, `email`, `password`, `username`) VALUES (':id',':email',':password',':username')",
+    $dataBaseHandler->query("INSERT INTO `users`(`id`, `email`, `password`, `username`) VALUES (:id, :email, :password, :username)",
     array("id" => NULL, "email" => $userEmail, "password" => $userPassword, "username" => $userUsername));
     print_r("reg");
 }
 else{
-    $dataBaseHandler->query("SELECT * FROM users WHERE `email` = :email", array("email" => $userEmail));
-    if(isset($dataBaseHandler)){
+    $dataBaseHandler->query("SELECT * FROM users WHERE `email` = :email AND `password` = :password", 
+        array("email" => $userEmail, "password" => $userPassword));
+    $result = $dataBaseHandler->fetch(DataBase::FETCH, PDO::FETCH_ASSOC);
+    if($result){
         print_r("in");
     }
     else{
