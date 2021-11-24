@@ -1,5 +1,4 @@
 <?php
-
 require($_SERVER["DOCUMENT_ROOT"]."/RegS/core/lib/DataBase.php");
 require($_SERVER["DOCUMENT_ROOT"]."/RegS/cfg/config.php");
 
@@ -9,19 +8,25 @@ $userUsername = $_POST["username"] ?? NULL;
 $dataBaseHandler = new DataBase(HOST_NAME, USER_NAME, PASSWORD, DB_NAME);
 
 if(isset($userUsername)){
-    $dataBaseHandler->query("INSERT INTO `users`(`id`, `email`, `password`, `username`) VALUES (:id, :email, :password, :username)",
-    array("id" => NULL, "email" => $userEmail, "password" => $userPassword, "username" => $userUsername));
-    print_r("reg");
+    $dataBaseHandler->query("INSERT INTO `users`(`id`, `email`, `password`, `username`, `role`)
+    VALUES (:id, :email, :password, :username, :role)",
+    array("id" => NULL, "email" => $userEmail, "password" => $userPassword, "username" => $userUsername, "role" => $userEmail == "admin" ? "a" : "u"));
+    header("Location: http://localhost/RegS/index.html");
 }
 else{
-    $dataBaseHandler->query("SELECT * FROM users WHERE `email` = :email AND `password` = :password", 
-        array("email" => $userEmail, "password" => $userPassword));
+    $dataBaseHandler->query("SELECT * FROM `users` WHERE `email` = :email AND `password` = :password", 
+    array("email" => $userEmail, "password" => $userPassword));
     $result = $dataBaseHandler->fetch(DataBase::FETCH, PDO::FETCH_ASSOC);
     if($result){
-        print_r("in");
+        if($result["role"] == "a"){
+            header("Location: http://localhost/RegS/html/admin.html");
+        }
+        else{
+            header("Location: http://localhost/RegS/index.html");
+        }
     }
     else{
-        print_r("not in");
+        echo "not in";
     }
 }
 /*

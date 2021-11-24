@@ -1,0 +1,22 @@
+.span, .input{
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+}
+span,input{
+  color:#ffffff;
+	font-family:Arial;
+	font-size:19px;
+  margin: 10pt;
+  padding: 5pt;
+  background-color: rgb(29,171,170);
+  border-radius:10px;
+	border:1px solid #4e6096;
+}
+span{
+  cursor: none;
+}
+button{
+  float: right;
+  margin-right: 10pt;
+}
